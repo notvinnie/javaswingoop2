@@ -1,12 +1,16 @@
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main extends JFrame {
+    // shared "database"
     public final Map<String, User> accounts = new HashMap<>();
+    public final List<Pet> pets = new ArrayList<>();
     public User currentUser;
 
     private final CardLayout cards = new CardLayout();
@@ -16,6 +20,8 @@ public class Main extends JFrame {
     private final VetHomeScreen vetHome = new VetHomeScreen(this);
     private final DeskHomeScreen deskHome = new DeskHomeScreen(this);
     private final EditProfileScreen editProfile = new EditProfileScreen(this);
+    private final PetsScreen petsScreen = new PetsScreen(this);
+    private final PetFormScreen petForm = new PetFormScreen(this);
 
     public Main() {
         root.add(centered(new LoginScreen(this).getPanel(), 380, 320), "login");
@@ -24,6 +30,8 @@ public class Main extends JFrame {
         root.add(centered(vetHome.getPanel(), 380, 400), "vetHome");
         root.add(centered(deskHome.getPanel(), 380, 440), "deskHome");
         root.add(centered(editProfile.getPanel(), 400, 520), "editProfile");
+        root.add(centered(petsScreen.getPanel(), 600, 420), "pets");
+        root.add(centered(petForm.getPanel(), 400, 500), "petForm");
 
         setLayout(new BorderLayout());
         add(buildHeader(), BorderLayout.NORTH);
@@ -76,6 +84,25 @@ public class Main extends JFrame {
     public void showEditProfile() {
         editProfile.refresh();
         showScreen("editProfile");
+    }
+
+    public void showPets() {
+        petsScreen.refresh();
+        showScreen("pets");
+    }
+
+    public void showPetForm(Pet pet) {
+        petForm.refresh(pet);
+        showScreen("petForm");
+    }
+
+    // all pets belonging to one owner
+    public List<Pet> petsOf(String username) {
+        List<Pet> result = new ArrayList<>();
+        for (Pet p : pets) {
+            if (p.ownerUsername.equals(username)) result.add(p);
+        }
+        return result;
     }
 
     public void logout() {

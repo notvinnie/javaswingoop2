@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -41,6 +42,12 @@ public class Theme {
                 box.setForeground(TEXT);
             } else if (c instanceof JLabel l) {
                 l.setForeground(l.getFont().isBold() ? PRIMARY_DARK : TEXT);
+            } else if (c instanceof JScrollPane sp) {
+                sp.setBorder(new LineBorder(BORDER, 1, true));
+                sp.getViewport().setBackground(Color.WHITE);
+                if (sp.getViewport().getView() instanceof JTable t) {
+                    styleTable(t);
+                }
             } else if (c instanceof JPanel p) {
                 p.setBackground(CARD);
                 boolean titled = p.getBorder() instanceof TitledBorder;
@@ -52,6 +59,23 @@ public class Theme {
                 styleTree(p, titled);
             }
         }
+    }
+
+    private static void styleTable(JTable t) {
+        t.setRowHeight(28);
+        t.setForeground(TEXT);
+        t.setGridColor(BORDER);
+        t.setShowVerticalLines(false);
+        t.setSelectionBackground(new Color(0xCFE8E3));
+        t.setSelectionForeground(TEXT);
+
+        DefaultTableCellRenderer header = new DefaultTableCellRenderer();
+        header.setBackground(PRIMARY);
+        header.setForeground(Color.WHITE);
+        header.setFont(t.getFont().deriveFont(Font.BOLD));
+        header.setBorder(new EmptyBorder(6, 8, 6, 8));
+        t.getTableHeader().setDefaultRenderer(header);
+        t.getTableHeader().setReorderingAllowed(false);
     }
 
     private static void styleButton(JButton b) {
