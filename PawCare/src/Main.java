@@ -12,7 +12,7 @@ public class Main extends JFrame {
     public Main() {
         root.add(new LoginScreen(this).getPanel(), "login");
         root.add(new SignUpScreen(this).getPanel(), "signup");
-//        root.add(new HomeScreen(this).getPanel(), "home");
+        root.add(new HomeScreen(this).getPanel(), "home");
 
         setContentPane(root);
         setTitle("PawCare");
