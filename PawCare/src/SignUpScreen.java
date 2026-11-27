@@ -9,7 +9,6 @@ public class SignUpScreen {
     private JComboBox<Role> roleBox;
     private JButton createButton;
     private JButton backButton;
-    private JComboBox comboBox1;
 
     public SignUpScreen(Main app) {
         roleBox.setModel(new DefaultComboBoxModel<>(Role.values()));
