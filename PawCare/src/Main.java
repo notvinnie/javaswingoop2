@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Main extends JFrame {
     // shared "database"
@@ -22,6 +24,8 @@ public class Main extends JFrame {
     private final EditProfileScreen editProfile = new EditProfileScreen(this);
     private final PetsScreen petsScreen = new PetsScreen(this);
     private final PetFormScreen petForm = new PetFormScreen(this);
+    public final List<Appointment> appointments = new ArrayList<>();
+    private final BookAppointmentScreen bookingScreen = new BookAppointmentScreen(this);
 
     public Main() {
         root.add(centered(new LoginScreen(this).getPanel(), 380, 320), "login");
@@ -32,6 +36,7 @@ public class Main extends JFrame {
         root.add(centered(editProfile.getPanel(), 400, 520), "editProfile");
         root.add(centered(petsScreen.getPanel(), 600, 420), "pets");
         root.add(centered(petForm.getPanel(), 400, 500), "petForm");
+        root.add(centered(bookingScreen.getPanel(), 400, 480), "booking");
 
         setLayout(new BorderLayout());
         add(buildHeader(), BorderLayout.NORTH);
@@ -94,6 +99,42 @@ public class Main extends JFrame {
     public void showPetForm(Pet pet) {
         petForm.refresh(pet);
         showScreen("petForm");
+    }
+
+    public void showBooking() {
+        if (petsOf(currentUser.username).isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Add a pet first, then you can book an appointment.");
+            showPets();
+            return;
+        }
+        bookingScreen.refresh();
+        showScreen("booking");
+    }
+
+    // a slot is taken if a non-cancelled appointment already uses it
+    public boolean isSlotTaken(LocalDate date, LocalTime time) {
+        for (Appointment a : appointments) {
+            if (a.status != Appointment.Status.CANCELLED
+                    && a.date.equals(date) && a.time.equals(time)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // clinic hours: 9:00 AM to 5:00 PM, one slot every 30 minutes
+    public List<LocalTime> availableSlots(LocalDate date) {
+        List<LocalTime> result = new ArrayList<>();
+        LocalTime t = LocalTime.of(9, 0);
+        LocalTime last = LocalTime.of(16, 30);
+        while (!t.isAfter(last)) {
+            boolean inThePast = date.equals(LocalDate.now()) && !t.isAfter(LocalTime.now());
+            if (!inThePast && !isSlotTaken(date, t)) {
+                result.add(t);
+            }
+            t = t.plusMinutes(30);
+        }
+        return result;
     }
 
     // all pets belonging to one owner

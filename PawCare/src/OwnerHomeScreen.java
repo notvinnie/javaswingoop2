@@ -12,7 +12,7 @@ public class OwnerHomeScreen {
         greetingLabel.setFont(greetingLabel.getFont().deriveFont(Font.BOLD, 20f));
 
         petsButton.addActionListener(e -> app.showPets());
-        bookButton.addActionListener(e -> app.comingSoon("Book Appointment"));
+        bookButton.addActionListener(e -> app.showBooking());
         billsButton.addActionListener(e -> app.comingSoon("Medical Bills"));
         recordsButton.addActionListener(e -> app.comingSoon("Medical Records"));
         profileButton.addActionListener(e -> app.showEditProfile());
