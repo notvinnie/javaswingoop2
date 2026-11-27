@@ -13,6 +13,8 @@ public class Appointment {
     public LocalTime time;
     public String reason;
     public Status status = Status.PENDING;
+    public boolean reminderSent = false;    // desk has sent a reminder
+    public boolean reminderShown = false;   // owner has seen it
 
     public Appointment(String ownerUsername, Pet pet, LocalDate date,
                        LocalTime time, String reason) {

@@ -11,10 +11,10 @@ public class DeskHomeScreen {
         this.app = app;
         greetingLabel.setFont(greetingLabel.getFont().deriveFont(Font.BOLD, 20f));
 
-        appointmentsButton.addActionListener(e -> app.comingSoon("Appointments"));
+        appointmentsButton.addActionListener(e -> app.showAppointments());
         ownersButton.addActionListener(e -> app.comingSoon("Pet Owners"));
         billingButton.addActionListener(e -> app.comingSoon("Billing"));
-        remindersButton.addActionListener(e -> app.comingSoon("Send Reminders"));
+        remindersButton.addActionListener(e -> app.sendReminders());
         profileButton.addActionListener(e -> app.showEditProfile());
         logoutButton.addActionListener(e -> app.logout());
     }

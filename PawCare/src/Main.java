@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main extends JFrame {
     // shared "database"
@@ -37,6 +38,7 @@ public class Main extends JFrame {
         root.add(centered(petsScreen.getPanel(), 600, 420), "pets");
         root.add(centered(petForm.getPanel(), 400, 500), "petForm");
         root.add(centered(bookingScreen.getPanel(), 400, 480), "booking");
+        root.add(centered(appointmentsScreen.getPanel(), 660, 420), "appointments");
 
         setLayout(new BorderLayout());
         add(buildHeader(), BorderLayout.NORTH);
@@ -80,7 +82,7 @@ public class Main extends JFrame {
 
     public void goHome() {
         switch (currentUser.role) {
-            case PET_OWNER -> { ownerHome.refresh(); showScreen("ownerHome"); }
+            case PET_OWNER -> { ownerHome.refresh(); showScreen("ownerHome"); showOwnerReminders(); }
             case VETERINARIAN -> { vetHome.refresh(); showScreen("vetHome"); }
             case FRONT_DESK -> { deskHome.refresh(); showScreen("deskHome"); }
         }
@@ -110,6 +112,65 @@ public class Main extends JFrame {
         bookingScreen.refresh();
         showScreen("booking");
     }
+
+    public void showAppointments() {
+        appointmentsScreen.refresh();
+        showScreen("appointments");
+    }
+
+    // Front Desk: remind owners of confirmed appointments today or tomorrow
+    public void sendReminders() {
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("EEE, MMM d");
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("h:mm a");
+        LocalDate today = LocalDate.now();
+
+        StringBuilder sent = new StringBuilder();
+        int count = 0;
+        for (Appointment a : appointments) {
+            boolean soon = !a.date.isBefore(today) && !a.date.isAfter(today.plusDays(1));
+            if (a.status == Appointment.Status.CONFIRMED && soon && !a.reminderSent) {
+                a.reminderSent = true;
+                count++;
+                User owner = accounts.get(a.ownerUsername);
+                String ownerName = owner != null ? owner.fullName : a.ownerUsername;
+                sent.append("- ").append(ownerName).append(": ").append(a.pet.name)
+                        .append(", ").append(a.date.format(dateFmt))
+                        .append(" at ").append(a.time.format(timeFmt)).append("\n");
+            }
+        }
+
+        if (count == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "No reminders to send.\n(Only confirmed appointments today or tomorrow need one.)");
+        } else {
+            JOptionPane.showMessageDialog(this, count + " reminder(s) sent:\n\n" + sent);
+        }
+    }
+
+    // Pet Owner: show any reminders they haven't seen yet
+    private void showOwnerReminders() {
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("EEE, MMM d");
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("h:mm a");
+
+        StringBuilder text = new StringBuilder();
+        for (Appointment a : appointments) {
+            if (a.ownerUsername.equals(currentUser.username)
+                    && a.reminderSent && !a.reminderShown
+                    && a.status == Appointment.Status.CONFIRMED) {
+                a.reminderShown = true;
+                text.append("- ").append(a.pet.name).append(": ")
+                        .append(a.date.format(dateFmt)).append(" at ")
+                        .append(a.time.format(timeFmt)).append("\n");
+            }
+        }
+        if (!text.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Appointment reminder:\n\n" + text);
+        }
+    }
+
+
+
+    private final AppointmentsScreen appointmentsScreen = new AppointmentsScreen(this);
 
     // a slot is taken if a non-cancelled appointment already uses it
     public boolean isSlotTaken(LocalDate date, LocalTime time) {
