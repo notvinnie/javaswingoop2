@@ -6,8 +6,6 @@ public class LoginScreen {
     private JPasswordField passwordField1;
     private JButton loginButton;
     private JButton signUpButton;
-    private JPanel Username;
-    private JPanel Password;
 
     public LoginScreen(Main app) {
         loginButton.addActionListener(e -> {
@@ -20,6 +18,9 @@ public class LoginScreen {
             } else if (!app.accounts.get(user).equals(pass)) {
                 JOptionPane.showMessageDialog(mainPanel, "Wrong password.");
             } else {
+                app.currentUser = user;
+                textField1.setText("");
+                passwordField1.setText("");
                 app.showScreen("home");
             }
         });
