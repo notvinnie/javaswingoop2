@@ -9,19 +9,20 @@ public class LoginScreen {
 
     public LoginScreen(Main app) {
         loginButton.addActionListener(e -> {
-            String user = textField1.getText().trim();
+            String name = textField1.getText().trim();
             String pass = new String(passwordField1.getPassword());
+            User user = app.accounts.get(name);
 
-            if (!app.accounts.containsKey(user)) {
+            if (user == null) {                                   // Check Account Availability
                 JOptionPane.showMessageDialog(mainPanel, "No account found. Please sign up.");
                 app.showScreen("signup");
-            } else if (!app.accounts.get(user).equals(pass)) {
+            } else if (!user.password.equals(pass)) {             // Authenticate Password
                 JOptionPane.showMessageDialog(mainPanel, "Wrong password.");
             } else {
-                app.currentUser = user;
                 textField1.setText("");
                 passwordField1.setText("");
-                app.showScreen("home");
+                app.currentUser = user;
+                app.goHome();
             }
         });
 
