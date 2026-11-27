@@ -5,8 +5,6 @@ public class OwnerHomeScreen {
     private JPanel mainPanel;
     private JLabel greetingLabel;
     private JButton petsButton, bookButton, billsButton, recordsButton, profileButton, logoutButton;
-    private JButton appointmentButton;
-    private JButton remindersButton;
     private final Main app;
 
     public OwnerHomeScreen(Main app) {
