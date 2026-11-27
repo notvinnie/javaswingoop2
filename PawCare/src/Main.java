@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+
 public class Main extends JFrame {
     // shared "database"
     public final Map<String, User> accounts = new HashMap<>();
@@ -27,6 +28,10 @@ public class Main extends JFrame {
     private final PetFormScreen petForm = new PetFormScreen(this);
     public final List<Appointment> appointments = new ArrayList<>();
     private final BookAppointmentScreen bookingScreen = new BookAppointmentScreen(this);
+    public final List<MedicalRecord> records = new ArrayList<>();
+    private final AllPetsScreen allPetsScreen = new AllPetsScreen(this);
+    private final RecordsScreen recordsScreen = new RecordsScreen(this);
+    private final RecordFormScreen recordForm = new RecordFormScreen(this);
 
     public Main() {
         root.add(centered(new LoginScreen(this).getPanel(), 380, 320), "login");
@@ -39,6 +44,9 @@ public class Main extends JFrame {
         root.add(centered(petForm.getPanel(), 400, 500), "petForm");
         root.add(centered(bookingScreen.getPanel(), 400, 480), "booking");
         root.add(centered(appointmentsScreen.getPanel(), 660, 420), "appointments");
+        root.add(centered(allPetsScreen.getPanel(), 660, 420), "allPets");
+        root.add(centered(recordsScreen.getPanel(), 660, 420), "records");
+        root.add(centered(recordForm.getPanel(), 420, 440), "recordForm");
 
         setLayout(new BorderLayout());
         add(buildHeader(), BorderLayout.NORTH);
@@ -116,6 +124,32 @@ public class Main extends JFrame {
     public void showAppointments() {
         appointmentsScreen.refresh();
         showScreen("appointments");
+    }
+
+    public void showAllPets() {
+        allPetsScreen.refresh();
+        showScreen("allPets");
+    }
+
+    public void showRecords() {
+        recordsScreen.refresh();
+        showScreen("records");
+    }
+
+    // record == null: new record (pet may be preselected); otherwise edit that record
+    public void showRecordForm(MedicalRecord record, Pet pet) {
+        if (record == null && pets.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No pets are registered yet.");
+            return;
+        }
+        recordForm.refresh(record, pet);
+        showScreen("recordForm");
+    }
+
+    // full name of an owner, or their username if the account can't be found
+    public String ownerName(String username) {
+        User u = accounts.get(username);
+        return u != null ? u.fullName : username;
     }
 
     // Front Desk: remind owners of confirmed appointments today or tomorrow

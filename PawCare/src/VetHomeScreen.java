@@ -11,8 +11,8 @@ public class VetHomeScreen {
         this.app = app;
         greetingLabel.setFont(greetingLabel.getFont().deriveFont(Font.BOLD, 20f));
 
-        petsButton.addActionListener(e -> app.comingSoon("All Pets"));
-        recordsButton.addActionListener(e -> app.comingSoon("All Medical Records"));
+        petsButton.addActionListener(e -> app.showAllPets());
+        recordsButton.addActionListener(e -> app.showRecords());
         ownersButton.addActionListener(e -> app.comingSoon("Pet Owners"));
         profileButton.addActionListener(e -> app.showEditProfile());
         logoutButton.addActionListener(e -> app.logout());
