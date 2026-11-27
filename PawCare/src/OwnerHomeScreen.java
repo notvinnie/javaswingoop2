@@ -11,7 +11,7 @@ public class OwnerHomeScreen {
         this.app = app;
         greetingLabel.setFont(greetingLabel.getFont().deriveFont(Font.BOLD, 20f));
 
-        petsButton.addActionListener(e -> app.comingSoon("My Pets"));
+        petsButton.addActionListener(e -> app.showPets());
         bookButton.addActionListener(e -> app.comingSoon("Book Appointment"));
         billsButton.addActionListener(e -> app.comingSoon("Medical Bills"));
         recordsButton.addActionListener(e -> app.comingSoon("Medical Records"));
