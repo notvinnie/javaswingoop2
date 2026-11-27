@@ -47,3 +47,10 @@ public class Main extends JFrame {
     }
 
     public void comingSoon(String feature) {
+        JOptionPane.showMessageDialog(this, feature + " (coming soon)");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Main().setVisible(true));
+    }
+}
