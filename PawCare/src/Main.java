@@ -13,6 +13,7 @@ public class Main extends JFrame {
     private final OwnerHomeScreen ownerHome = new OwnerHomeScreen(this);
     private final VetHomeScreen vetHome = new VetHomeScreen(this);
     private final DeskHomeScreen deskHome = new DeskHomeScreen(this);
+    private final EditProfileScreen editProfile = new EditProfileScreen(this);
 
     public Main() {
         root.add(new LoginScreen(this).getPanel(), "login");
@@ -20,10 +21,11 @@ public class Main extends JFrame {
         root.add(ownerHome.getPanel(), "ownerHome");
         root.add(vetHome.getPanel(), "vetHome");
         root.add(deskHome.getPanel(), "deskHome");
+        root.add(editProfile.getPanel(), "editProfile");
 
         setContentPane(root);
         setTitle("PawCare - Veterinary Clinic System");
-        setSize(380, 450);
+        setSize(400, 560);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         showScreen("login");
@@ -39,6 +41,11 @@ public class Main extends JFrame {
             case VETERINARIAN -> { vetHome.refresh(); showScreen("vetHome"); }
             case FRONT_DESK -> { deskHome.refresh(); showScreen("deskHome"); }
         }
+    }
+
+    public void showEditProfile() {
+        editProfile.refresh();
+        showScreen("editProfile");
     }
 
     public void logout() {

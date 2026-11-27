@@ -14,7 +14,7 @@ public class VetHomeScreen {
         petsButton.addActionListener(e -> app.comingSoon("All Pets"));
         recordsButton.addActionListener(e -> app.comingSoon("All Medical Records"));
         ownersButton.addActionListener(e -> app.comingSoon("Pet Owners"));
-        profileButton.addActionListener(e -> app.comingSoon("Edit Profile"));
+        profileButton.addActionListener(e -> app.showEditProfile());
         logoutButton.addActionListener(e -> app.logout());
     }
 

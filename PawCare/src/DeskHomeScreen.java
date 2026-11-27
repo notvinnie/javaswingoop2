@@ -15,7 +15,7 @@ public class DeskHomeScreen {
         ownersButton.addActionListener(e -> app.comingSoon("Pet Owners"));
         billingButton.addActionListener(e -> app.comingSoon("Billing"));
         remindersButton.addActionListener(e -> app.comingSoon("Send Reminders"));
-        profileButton.addActionListener(e -> app.comingSoon("Edit Profile"));
+        profileButton.addActionListener(e -> app.showEditProfile());
         logoutButton.addActionListener(e -> app.logout());
     }
 

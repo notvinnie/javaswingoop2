@@ -15,7 +15,7 @@ public class OwnerHomeScreen {
         bookButton.addActionListener(e -> app.comingSoon("Book Appointment"));
         billsButton.addActionListener(e -> app.comingSoon("Medical Bills"));
         recordsButton.addActionListener(e -> app.comingSoon("Medical Records"));
-        profileButton.addActionListener(e -> app.comingSoon("Edit Profile"));
+        profileButton.addActionListener(e -> app.showEditProfile());
         logoutButton.addActionListener(e -> app.logout());
     }
 
